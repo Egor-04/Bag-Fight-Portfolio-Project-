@@ -1,47 +1,49 @@
 using UnityEngine;
-using EnemySystem;
 
-public class Zombie : Enemy
+namespace EnemySystem
 {
-    private void Update()
+    public class Zombie : Enemy
     {
-        DecreaseTimer();
-        MoveToTarget();
-    }
-
-    protected override void MoveToTarget()
-    {
-        Vector2 direction = _target.transform.position - transform.position;
-        float distance = Vector2.Distance(_target.transform.position, transform.position);
-
-        if (distance <= _minAttackDistance)
+        private void Update()
         {
-            _isWalking = false;
-            Attack();
+            DecreaseTimer();
+            MoveToTarget();
         }
-        else
+    
+        protected override void MoveToTarget()
         {
-            _isWalking = true;
-            _animator.SetBool("Walk", true);
-            transform.position += new Vector3(direction.normalized.x, 0f, 0f) * _moveSpeed * Time.deltaTime;
+            Vector2 direction = _target.transform.position - transform.position;
+            float distance = Vector2.Distance(_target.transform.position, transform.position);
+    
+            if (distance <= _minAttackDistance)
+            {
+                _isWalking = false;
+                Attack();
+            }
+            else
+            {
+                _isWalking = true;
+                _animator.SetBool("Walk", true);
+                transform.position += new Vector3(direction.normalized.x, 0f, 0f) * _moveSpeed * Time.deltaTime;
+            }
         }
-    }
-
-    protected override void Attack()
-    {
-        if (_currentAttackInterval <= 0f)
+    
+        protected override void Attack()
         {
-            _animator.SetBool("Walk", false);
-            _animator.SetTrigger("Attack");
-            _currentAttackInterval = _attackInterval;
+            if (_currentAttackInterval <= 0f)
+            {
+                _animator.SetBool("Walk", false);
+                _animator.SetTrigger("Attack");
+                _currentAttackInterval = _attackInterval;
+            }
         }
-    }
-
-    protected override void DecreaseTimer()
-    {
-        if (_isWalking == false)
+    
+        protected override void DecreaseTimer()
         {
-            base.DecreaseTimer();
+            if (_isWalking == false)
+            {
+                base.DecreaseTimer();
+            }
         }
     }
 }
