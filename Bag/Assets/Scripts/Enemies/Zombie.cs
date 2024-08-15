@@ -1,4 +1,5 @@
 using UnityEngine;
+using EnemySystem;
 
 public class Zombie : Enemy
 {
